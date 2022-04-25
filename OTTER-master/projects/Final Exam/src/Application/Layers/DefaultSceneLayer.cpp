@@ -378,24 +378,24 @@ void DefaultSceneLayer::_CreateScene()
 			//scene->MainCamera = cam;
 		}
 
-		//GameObject::Sptr Platform = scene->CreateGameObject("Platform");
-		//{
-		//	// Set position in the scene
-		//	Platform->SetPostion(glm::vec3(1.350f, 3.720f, 0.550f));
-		//	Platform->SetRotation(glm::vec3(-90.000f, 0.0f, 0.0f));
-		//
-		//	// Create and attach a renderer for the platform
-		//	RenderComponent::Sptr renderer = Platform->Add<RenderComponent>();
-		//	renderer->SetMesh(platformMesh);
-		//	renderer->SetMaterial(PlatformMaterial);
-		//
-		//	// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
-		//	TriggerVolume::Sptr trigger = Platform->Add<TriggerVolume>();
-		//	trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
-		//	trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
-		//
-		//	//Platform->Add<TriggerVolumeEnterBehaviour>();
-		//}
+		GameObject::Sptr Platform = scene->CreateGameObject("Platform");
+		{
+			// Set position in the scene
+			Platform->SetPostion(glm::vec3(1.350f, 3.720f, 0.550f));
+			Platform->SetRotation(glm::vec3(-90.000f, 0.0f, 0.0f));
+		
+			// Create and attach a renderer for the platform
+			RenderComponent::Sptr renderer = Platform->Add<RenderComponent>();
+			renderer->SetMesh(platformMesh);
+			renderer->SetMaterial(PlatformMaterial);
+		
+			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
+			TriggerVolume::Sptr trigger = Platform->Add<TriggerVolume>();
+			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
+			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
+		
+			//Platform->Add<TriggerVolumeEnterBehaviour>();
+		}
 
 		//// Set up all our sample objects
 		//GameObject::Sptr plane = scene->CreateGameObject("Plane");
