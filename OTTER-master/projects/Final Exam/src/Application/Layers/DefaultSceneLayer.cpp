@@ -138,13 +138,25 @@ void DefaultSceneLayer::_CreateScene()
 		celShader->SetDebugName("Cel Shader");
 
 
-		// Load in the meshes
+		// MESHES FOR EXAM
 		MeshResource::Sptr platformMesh = ResourceManager::CreateAsset<MeshResource>("Platform.obj");
+		MeshResource::Sptr characterMesh = ResourceManager::CreateAsset<MeshResource>("Character.obj");
+		MeshResource::Sptr enemyMesh = ResourceManager::CreateAsset<MeshResource>("Enemy.obj");
+		
+
+
+		// Load in the meshes
 		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
 		MeshResource::Sptr shipMesh = ResourceManager::CreateAsset<MeshResource>("fenrir.obj");
 
-		// Load in some textures
+		
+		// TEXTURES FOR EXAM
 		Texture2D::Sptr    PlatformTex = ResourceManager::CreateAsset<Texture2D>("textures/PlatformTEX.png");
+		Texture2D::Sptr    characterTex = ResourceManager::CreateAsset<Texture2D>("textures/CharacterTEX.png");
+		Texture2D::Sptr    enemyTex = ResourceManager::CreateAsset<Texture2D>("textures/EnemyTEX.png");
+		
+
+		// Load in some textures
 		Texture2D::Sptr    boxTexture = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
 		Texture2D::Sptr    boxSpec = ResourceManager::CreateAsset<Texture2D>("textures/box-specular.png");
 		Texture2D::Sptr    monkeyTex = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
@@ -221,6 +233,23 @@ void DefaultSceneLayer::_CreateScene()
 			PlatformMaterial->Set("u_Material.NormalMap", normalMapDefault);
 		}
 
+		Material::Sptr characterMaterial = ResourceManager::CreateAsset<Material>(celShader);
+		{
+			characterMaterial->Name = "Main Player";
+			characterMaterial->Set("u_Material.AlbedoMap", characterTex);
+			characterMaterial->Set("u_Material.Shininess", 0.0f);
+			characterMaterial->Set("s_ToonTerm", toonLut);
+			characterMaterial->Set("u_Material.NormalMap", normalMapDefault);
+		}
+
+		Material::Sptr enemyMaterial = ResourceManager::CreateAsset<Material>(deferredForward);
+		{
+			enemyMaterial->Name = "Enemy";
+			enemyMaterial->Set("u_Material.AlbedoMap", enemyTex);
+			enemyMaterial->Set("u_Material.Shininess", 0.1f);
+			enemyMaterial->Set("u_Material.NormalMap", normalMapDefault);
+		}
+
 		// This will be our box material, with no environment reflections
 		Material::Sptr boxMaterial = ResourceManager::CreateAsset<Material>(deferredForward);
 		{
@@ -229,7 +258,7 @@ void DefaultSceneLayer::_CreateScene()
 			boxMaterial->Set("u_Material.Shininess", 0.1f);
 			boxMaterial->Set("u_Material.NormalMap", normalMapDefault);
 		}
-
+		
 		// This will be the reflective material, we'll make the whole thing 90% reflective
 		Material::Sptr monkeyMaterial = ResourceManager::CreateAsset<Material>(deferredForward);
 		{
@@ -238,7 +267,7 @@ void DefaultSceneLayer::_CreateScene()
 			monkeyMaterial->Set("u_Material.NormalMap", normalMapDefault);
 			monkeyMaterial->Set("u_Material.Shininess", 0.5f);
 		}
-
+		
 		// This will be the reflective material, we'll make the whole thing 50% reflective
 		Material::Sptr testMaterial = ResourceManager::CreateAsset<Material>(deferredForward);
 		{
@@ -247,7 +276,7 @@ void DefaultSceneLayer::_CreateScene()
 			testMaterial->Set("u_Material.Specular", boxSpec);
 			testMaterial->Set("u_Material.NormalMap", normalMapDefault);
 		}
-
+		
 		// Our foliage vertex shader material 
 		Material::Sptr foliageMaterial = ResourceManager::CreateAsset<Material>(foliageShader);
 		{
@@ -256,13 +285,13 @@ void DefaultSceneLayer::_CreateScene()
 			foliageMaterial->Set("u_Material.Shininess", 0.1f);
 			foliageMaterial->Set("u_Material.DiscardThreshold", 0.1f);
 			foliageMaterial->Set("u_Material.NormalMap", normalMapDefault);
-
+		
 			foliageMaterial->Set("u_WindDirection", glm::vec3(1.0f, 1.0f, 0.0f));
 			foliageMaterial->Set("u_WindStrength", 0.5f);
 			foliageMaterial->Set("u_VerticalScale", 1.0f);
 			foliageMaterial->Set("u_WindSpeed", 1.0f);
 		}
-
+		
 		// Our toon shader material
 		Material::Sptr toonMaterial = ResourceManager::CreateAsset<Material>(celShader);
 		{
@@ -273,14 +302,14 @@ void DefaultSceneLayer::_CreateScene()
 			toonMaterial->Set("u_Material.Shininess", 0.1f);
 			toonMaterial->Set("u_Material.Steps", 8);
 		}
-
-
+		
+		
 		Material::Sptr displacementTest = ResourceManager::CreateAsset<Material>(displacementShader);
 		{
 			Texture2D::Sptr displacementMap = ResourceManager::CreateAsset<Texture2D>("textures/displacement_map.png");
 			Texture2D::Sptr normalMap = ResourceManager::CreateAsset<Texture2D>("textures/normal_map.png");
 			Texture2D::Sptr diffuseMap = ResourceManager::CreateAsset<Texture2D>("textures/bricks_diffuse.png");
-
+		
 			displacementTest->Name = "Displacement Map";
 			displacementTest->Set("u_Material.AlbedoMap", diffuseMap);
 			displacementTest->Set("u_Material.NormalMap", normalMap);
@@ -288,7 +317,7 @@ void DefaultSceneLayer::_CreateScene()
 			displacementTest->Set("u_Material.Shininess", 0.5f);
 			displacementTest->Set("u_Scale", 0.1f);
 		}
-
+		
 		Material::Sptr grey = ResourceManager::CreateAsset<Material>(deferredForward);
 		{
 			grey->Name = "Grey";
@@ -296,7 +325,7 @@ void DefaultSceneLayer::_CreateScene()
 			grey->Set("u_Material.Specular", solidBlackTex);
 			grey->Set("u_Material.NormalMap", normalMapDefault);
 		}
-
+		
 		Material::Sptr polka = ResourceManager::CreateAsset<Material>(deferredForward);
 		{
 			polka->Name = "Polka";
@@ -305,7 +334,7 @@ void DefaultSceneLayer::_CreateScene()
 			polka->Set("u_Material.NormalMap", normalMapDefault);
 			polka->Set("u_Material.EmissiveMap", ResourceManager::CreateAsset<Texture2D>("textures/polka.png"));
 		}
-
+		
 		Material::Sptr whiteBrick = ResourceManager::CreateAsset<Material>(deferredForward);
 		{
 			whiteBrick->Name = "White Bricks";
@@ -313,24 +342,24 @@ void DefaultSceneLayer::_CreateScene()
 			whiteBrick->Set("u_Material.Specular", solidGrey);
 			whiteBrick->Set("u_Material.NormalMap", ResourceManager::CreateAsset<Texture2D>("textures/normal_map.png"));
 		}
-
+		
 		Material::Sptr normalmapMat = ResourceManager::CreateAsset<Material>(deferredForward);
 		{
 			Texture2D::Sptr normalMap = ResourceManager::CreateAsset<Texture2D>("textures/normal_map.png");
 			Texture2D::Sptr diffuseMap = ResourceManager::CreateAsset<Texture2D>("textures/bricks_diffuse.png");
-
+		
 			normalmapMat->Name = "Tangent Space Normal Map";
 			normalmapMat->Set("u_Material.AlbedoMap", diffuseMap);
 			normalmapMat->Set("u_Material.NormalMap", normalMap);
 			normalmapMat->Set("u_Material.Shininess", 0.5f);
 			normalmapMat->Set("u_Scale", 0.1f);
 		}
-
+		
 		Material::Sptr multiTextureMat = ResourceManager::CreateAsset<Material>(multiTextureShader);
 		{
 			Texture2D::Sptr sand = ResourceManager::CreateAsset<Texture2D>("textures/terrain/sand.png");
 			Texture2D::Sptr grass = ResourceManager::CreateAsset<Texture2D>("textures/terrain/grass.png");
-
+		
 			multiTextureMat->Name = "Multitexturing";
 			multiTextureMat->Set("u_Material.DiffuseA", sand);
 			multiTextureMat->Set("u_Material.DiffuseB", grass);
@@ -339,39 +368,39 @@ void DefaultSceneLayer::_CreateScene()
 			multiTextureMat->Set("u_Material.Shininess", 0.5f);
 			multiTextureMat->Set("u_Scale", 0.1f);
 		}
-
+		
 		// Create some lights for our scene
 		GameObject::Sptr lightParent = scene->CreateGameObject("Lights");
-
+		
 		for (int ix = 0; ix < 50; ix++) {
 			GameObject::Sptr light = scene->CreateGameObject("Light");
 			light->SetPostion(glm::vec3(glm::diskRand(25.0f), 1.0f));
 			lightParent->AddChild(light);
-
+		
 			Light::Sptr lightComponent = light->Add<Light>();
 			lightComponent->SetColor(glm::linearRand(glm::vec3(0.0f), glm::vec3(1.0f)));
 			lightComponent->SetRadius(glm::linearRand(0.1f, 10.0f));
 			lightComponent->SetIntensity(glm::linearRand(1.0f, 2.0f));
 		}
-
+		
 		// We'll create a mesh that is a simple plane that we can resize later
 		MeshResource::Sptr planeMesh = ResourceManager::CreateAsset<MeshResource>();
 		planeMesh->AddParam(MeshBuilderParam::CreatePlane(ZERO, UNIT_Z, UNIT_X, glm::vec2(1.0f)));
 		planeMesh->GenerateMesh();
-
+		
 		MeshResource::Sptr sphere = ResourceManager::CreateAsset<MeshResource>();
 		sphere->AddParam(MeshBuilderParam::CreateIcoSphere(ZERO, ONE, 5));
 		sphere->GenerateMesh();
-
+		
 		// Set up the scene's camera
 		GameObject::Sptr camera = scene->MainCamera->GetGameObject()->SelfRef();
 		{
 			camera->SetPostion({ -7.460, -11.370, 7.370 });
 			camera->SetRotation({ 90.000, 0, -90.000 });
 			//camera->LookAt(glm::vec3(0.0f));
-
+		
 			camera->Add<SimpleCameraControl>();
-
+		
 			// This is now handled by scene itself!
 			//Camera::Sptr cam = camera->Add<Camera>();
 			// Make sure that the camera is set as the scene's main camera!
@@ -395,6 +424,88 @@ void DefaultSceneLayer::_CreateScene()
 			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
 		
 			//Platform->Add<TriggerVolumeEnterBehaviour>();
+		}
+
+		GameObject::Sptr Platform2 = scene->CreateGameObject("Platform 2");
+		{
+			// Set position in the scene
+			Platform2->SetPostion(glm::vec3(1.350f, 3.720f, 0.550f));
+			Platform2->SetRotation(glm::vec3(-180.000f, 0.0f, -180.0f));
+
+			// Create and attach a renderer for the platform
+			RenderComponent::Sptr renderer = Platform2->Add<RenderComponent>();
+			renderer->SetMesh(platformMesh);
+			renderer->SetMaterial(PlatformMaterial);
+
+			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
+			TriggerVolume::Sptr trigger = Platform2->Add<TriggerVolume>();
+			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
+			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
+
+			//Platform->Add<TriggerVolumeEnterBehaviour>();
+		}
+
+		GameObject::Sptr Platform3 = scene->CreateGameObject("Platform 3");
+		{
+			// Set position in the scene
+			Platform3->SetPostion(glm::vec3(1.350f, -27.200f, 0.550f));
+			Platform3->SetRotation(glm::vec3(-180.000f, 0.0f, 90.0f));
+
+			// Create and attach a renderer for the platform
+			RenderComponent::Sptr renderer = Platform3->Add<RenderComponent>();
+			renderer->SetMesh(platformMesh);
+			renderer->SetMaterial(PlatformMaterial);
+
+			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
+			TriggerVolume::Sptr trigger = Platform3->Add<TriggerVolume>();
+			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
+			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
+
+			//Platform->Add<TriggerVolumeEnterBehaviour>();
+		}
+
+		GameObject::Sptr mainPlayer = scene->CreateGameObject("Main Player");
+		{
+			// Set position in the scene
+			mainPlayer->SetPostion(glm::vec3(1.390f, 0.500f, 1.990f));
+			mainPlayer->SetRotation(glm::vec3(90.000f, 0.0f, -90.0f));
+
+			// Add some behaviour that relies on the physics body
+			mainPlayer->Add<JumpBehaviour>();
+
+			// Create and attach a renderer for the monkey
+			RenderComponent::Sptr renderer = mainPlayer->Add<RenderComponent>();
+			renderer->SetMesh(characterMesh);
+			renderer->SetMaterial(characterMaterial);
+
+			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
+			TriggerVolume::Sptr trigger = mainPlayer->Add<TriggerVolume>();
+			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
+			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
+
+			mainPlayer->Add<TriggerVolumeEnterBehaviour>();
+		}
+
+		GameObject::Sptr Enemy = scene->CreateGameObject("Enemy");
+		{
+			// Set position in the scene
+			Enemy->SetPostion(glm::vec3(1.390f, -23.170f, 2.540f));
+			Enemy->SetRotation(glm::vec3(90.000f, 0.0f, -180.0f));
+		
+			// Add some behaviour that relies on the physics body
+			Enemy->Add<JumpBehaviour>();
+		
+			// Create and attach a renderer for the monkey
+			RenderComponent::Sptr renderer = Enemy->Add<RenderComponent>();
+			renderer->SetMesh(enemyMesh);
+			renderer->SetMaterial(enemyMaterial);
+		
+			// Example of a trigger that interacts with static and kinematic bodies as well as dynamic bodies
+			TriggerVolume::Sptr trigger = Enemy->Add<TriggerVolume>();
+			trigger->SetFlags(TriggerTypeFlags::Statics | TriggerTypeFlags::Kinematics);
+			trigger->AddCollider(BoxCollider::Create(glm::vec3(1.0f)));
+		
+			Enemy->Add<TriggerVolumeEnterBehaviour>();
 		}
 
 		//// Set up all our sample objects
@@ -466,7 +577,6 @@ void DefaultSceneLayer::_CreateScene()
 		//
 		//	monkey1->Add<TriggerVolumeEnterBehaviour>();
 		//}
-
 
 		//GameObject::Sptr ship = scene->CreateGameObject("Fenrir");
 		//{
